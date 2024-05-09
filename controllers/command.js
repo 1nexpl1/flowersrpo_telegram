@@ -1,5 +1,5 @@
 const { Auth, Choose } = require("../utils/buttons");
-
+const { fmt,  link } = require ("telegraf/format");
 
 const start = (ctx) => {
     ctx.reply(`
@@ -12,6 +12,10 @@ const registration = (ctx) =>
     ctx.reply(`
         ${ctx.update.message.from.first_name}, выбери способ регистрации `, { ...Choose });
 
+
+const onsite = (ctx) =>{
+    ctx.reply(fmt`Переходите на наш обновленный ${link("сайт", "https://flowers-pro-vp.ru/catalog")}, там все понятно, быстро и легко`)
+}
 const regInBot = (ctx) => {
     return ctx.scene.enter('registration')
 }
@@ -26,5 +30,6 @@ module.exports = {
     start,
     registration,
     regInBot,
-    logInBot
+    logInBot, 
+    onsite
 }

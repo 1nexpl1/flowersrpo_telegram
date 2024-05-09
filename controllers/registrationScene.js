@@ -11,7 +11,7 @@ const { start } = require('./command');
 const stepOne = Telegraf.on('text', async ctx => {
     try {
         const text = ctx.text
-        ctx.reply('Отлично, очень рады познакомиться, теперь введи пожалуйста свою почту, чтобы мы всегда оставались с тобой на связи')
+        ctx.reply('Отлично, очень рады познакомиться, теперь введи пожалуйста свою почту, чтобы мы всегда оставались с тобой на связи', {...BackToStart})
         ctx.scene.state.name = text
         ctx.wizard.next();
     } catch (error) {
@@ -23,7 +23,7 @@ const stepOne = Telegraf.on('text', async ctx => {
 const stepTwo = Telegraf.on('text', async ctx => {
     try {
         const text = ctx.text
-        ctx.reply('Cупер, осталось придумать какой-нибудь интересный пароль, чтобы никто не смог узнать про твои покупки)')
+        ctx.reply('Cупер, осталось придумать какой-нибудь интересный пароль, чтобы никто не смог узнать про твои покупки)', {...BackToStart})
         ctx.scene.state.mail = text
         ctx.wizard.next();
     } catch (error) {
@@ -47,8 +47,8 @@ const stepThree = Telegraf.on('text', async ctx => {
 const registrationScene = new Scenes.WizardScene('registration', stepOne, stepTwo, stepThree)
 
 
-registrationScene.enter(ctx => ctx.reply('Введи свое имя'), {
-    ...BackToStart
+registrationScene.enter(ctx => {
+    ctx.reply('Введи свое имя', {...BackToStart})
 })
 
 registrationScene.hears(CMD_TEXT.backToStart, ctx => {

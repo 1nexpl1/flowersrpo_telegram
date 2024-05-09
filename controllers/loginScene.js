@@ -3,6 +3,7 @@ const { CMD_TEXT } = require('../config/consts');
 const {  login, fetchOrdersPersonal } = require('../services/registration');
 const {BackToStart} = require('../utils/buttons');
 const { start } = require('./command');
+const { fmt, bold, link } = require ("telegraf/format");
 
 
 
@@ -11,7 +12,7 @@ const { start } = require('./command');
 const stepOne = Telegraf.on('text', async ctx => {
     try {
         const text = ctx.text
-        ctx.reply('Отлично, теперь давайте введем пароль')
+        ctx.reply('Отлично, теперь давайте введем пароль', {...BackToStart})
         ctx.scene.state.mail = text
         ctx.wizard.next();
     } catch (error) {
@@ -32,10 +33,11 @@ const stepTwo = Telegraf.on('text', async ctx => {
             value += el.value
         })
         discount = value > 10000 ? '5%' : '2%'
-        ctx.reply(`Сумма ваших заказов: ${value},
-Ваша скидка ${discount}
+        ctx.reply(fmt`Сумма ваших заказов: ${value},
+Ваша скидка ${bold(discount)}
+Посетите наш обновленный ${link("сайт", "https://flowers-pro-vp.ru/catalog")} чтобы увидеть еще больше новых букетов
         `);
-        ctx.wizard.next();
+        ctx.scene.leave;
     } catch (error) {
         console.log(error)
         ctx.reply('Упс... Произошла какая - то ошибка');
@@ -48,7 +50,7 @@ const stepTwo = Telegraf.on('text', async ctx => {
 const loginScene = new Scenes.WizardScene('login', stepOne, stepTwo)
 
 
-loginScene.enter(ctx => ctx.reply('Для начала нам нужно узнать кто вы, введите ваш email'), {...BackToStart})
+loginScene.enter(ctx => ctx.reply('Для начала нам нужно узнать кто вы, введите ваш email', {...BackToStart}))
 
 loginScene.hears(CMD_TEXT.backToStart, ctx => {
     ctx.scene.leave();
