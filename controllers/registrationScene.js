@@ -34,6 +34,7 @@ const stepTwo = Telegraf.on('text', async ctx => {
 
 const stepThree = Telegraf.on('text', async ctx => {
     try {
+        const text = ctx.text
         const token = await registration(ctx.scene.state.name, ctx.scene.state.mail, text)
         ctx.reply('Супер! Регистрация пройдена')
         ctx.scene.leave();
